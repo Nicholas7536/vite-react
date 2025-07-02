@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+
+type PlayerData = {
+  name?: string;
+  kd?: number;
+  // Add other expected fields based on Deadlock API response
+  [key: string]: any;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [playerData, setPlayerData] = useState<PlayerData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const steamId = '260148293'; // Optional: make this dynamic later
+
+  useEffect(() => {
+    const fetchPlayer = async () => {
+      try {
+        const res = await fetch(`/api/player?steamid=${steamId}`);
+        if (!res.ok) throw new Error('Failed to fetch player data');
+        const data = await res.json();
+        setPlayerData(data);
+      } catch (err: any) {
+        console.error('API error:', err);
+        setError(err.message || 'Unknown error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlayer();
+  }, [steamId]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>DL Comparison Tracker by Deadlock API</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+      <h1>Deadlock Player Card</h1>
+
+      {loading && <p>Loading player data...</p>}
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      {playerData && !error && (
+        <pre style={{ background: '#FFFFF', padding: '1rem', borderRadius: '8px' }}>
+          {JSON.stringify(playerData, null, 2)}
+        </pre>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
