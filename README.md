@@ -1,21 +1,31 @@
-# React + TypeScript + Vite
+# Deadlock Stat Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web app for tracking player statistics in Valve’s game **Deadlock**. Users can search for Steam profiles and view match history, performance data, and more. Built for speed and simplicity, with caching to minimize external API calls.
 
-While this project uses React, Vite supports many popular JS frameworks. [See all the supported frameworks](https://vitejs.dev/guide/#scaffolding-your-first-vite-project).
+## Tech Stack
 
-## Deploy Your Own
+- React + TypeScript + Vite (frontend)
+- Vercel serverless functions (`/api` backend)
+- Redis cache (via Upstash or similar)
+- [deadlock-api.com](https://deadlock-api.com) for game data
 
-Deploy your own Vite project with Vercel.
+## How It Works
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/examples/tree/main/framework-boilerplates/vite-react&template=vite-react)
+- User searches a Steam ID
+- Serverless function checks Redis for cached stats
+- If no cache, data is pulled from the Deadlock API and stored temporarily
+- Data is returned and displayed instantly in the UI
 
-_Live Example: https://vite-react-example.vercel.app_
+## Features
 
-### Deploying From Your Terminal
+- Player stat lookup by Steam ID
+- Match performance and history
+- Fast loads using Redis cache
+- Minimal, responsive interface
 
-You can deploy your new Vite project with a single command from your terminal using [Vercel CLI](https://vercel.com/download):
+## Status
 
-```shell
-$ vercel
-```
+Active development. Future updates may include:
+- Player comparison
+- Stat visualizations
+- Mobile enhancements
