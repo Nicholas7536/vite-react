@@ -63,7 +63,7 @@ function App() {
       {loading && <p>Loading player data...</p>}
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       {playerData && !error && (
-        <pre style={{ background: '#FFF', padding: '1rem', borderRadius: '8px' }}>
+        <pre style={{ padding: '1rem', borderRadius: '8px' }}>
           {JSON.stringify(playerData, null, 2)}
         </pre>
       )}
